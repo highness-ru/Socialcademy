@@ -1,5 +1,73 @@
 import SwiftUI
 
+struct PostRow: View {
+    @ObservedObject var viewModel: PostRowViewModel
+    @EnvironmentObject private var factory: ViewModelFactory
+    
+    @State private var showConfirmationDialog = false
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                AuthorView(author: viewModel.author)
+                Spacer()
+                Text(viewModel.timestamp.formatted(date: .abbreviated, time: .omitted))
+                    .font(.caption)
+            }
+            .foregroundColor(.gray)
+            Text(viewModel.title)
+                .font(.title3)
+                .fontWeight(.semibold)
+            Text(viewModel.content)
+            HStack {
+                FavoriteButton(isFavorite: viewModel.isFavorite, action: {
+                    viewModel.favoritePost()
+                })
+                Spacer()
+                if viewModel.canDeletePost {
+                    Button(role: .destructive, action: {
+                        showConfirmationDialog = true
+                    }) {
+                        Label("Delete", systemImage: "trash")
+                    }
+                }
+                NavigationLink {
+                    CommentsList(viewModel: factory.makeCommentsViewModel(for: viewModel.post))
+                } label: {
+                    Label("Comments", systemImage: "text.bubble")
+                        .foregroundColor(.secondary)
+                }
+            }
+            .labelStyle(.iconOnly)
+        }
+        .padding()
+        .confirmationDialog("Are you sure you want to delete this post?", isPresented: $showConfirmationDialog, titleVisibility: .visible) {
+            Button("Delete", role: .destructive, action: {
+                viewModel.deletePost()
+            })
+        }
+        .alert("Error", error: $viewModel.error)
+    }
+}
+
+private extension PostRow {
+    struct AuthorView: View {
+        let author: User
+        
+        @EnvironmentObject private var factory: ViewModelFactory
+        
+        var body: some View {
+            NavigationLink {
+                PostsList(viewModel: factory.makePostsViewModel(filter: .author(author)))
+            } label: {
+                Text(author.name)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+            }
+        }
+    }
+}
+
 private extension PostRow {
     struct FavoriteButton: View {
         let isFavorite: Bool
@@ -19,51 +87,6 @@ private extension PostRow {
     }
 }
 
-struct PostRow: View {
-    @State private var showConfirmationDialog = false
-    @ObservedObject var viewModel: PostRowViewModel
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                Text(viewModel.authorName)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                Spacer()
-                Text(viewModel.timestamp.formatted(date: .abbreviated, time: .shortened))
-                    .font(.caption)
-            }
-            .foregroundColor(.gray)
-            Text(viewModel.title)
-                .font(.title3)
-                .fontWeight(.semibold)
-            Text(viewModel.content)
-            HStack {
-                FavoriteButton(isFavorite: viewModel.isFavorite, action: {
-                    viewModel.favoritePost()
-                })
-                Spacer()
-                Button(role: .destructive, action: {
-                    showConfirmationDialog = true
-                }) {
-                    Label("Delete", systemImage: "trash")
-                }
-            }
-            .labelStyle(.iconOnly)
-            .buttonStyle(.borderless)
-        }
-        .padding(.vertical)
-        .confirmationDialog("Are you sure you want to delete this post?", isPresented: $showConfirmationDialog, titleVisibility: .visible) {
-            Button("Delete", role: .destructive, action: {
-                viewModel.deletePost()
-            })
-        }
-        .alert("Error", error: $viewModel.error)
-    }
-}
-
 #Preview {
-    List {
-        PostRow(viewModel: PostRowViewModel(post: Post.testPost, deleteAction: {}, favoriteAction: {}))
-    }
+    PostRow(viewModel: PostRowViewModel(post: Post.testPost, deleteAction: {}, favoriteAction: {}))
 }
