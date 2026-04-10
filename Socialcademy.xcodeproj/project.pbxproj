@@ -10,6 +10,7 @@
 		788C603A2F7C8299005F4721 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 788C60392F7C8299005F4721 /* FirebaseAnalytics */; };
 		788C603C2F7C8299005F4721 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 788C603B2F7C8299005F4721 /* FirebaseFirestore */; };
 		78B5B28A2F87AFC000D6A290 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 78B5B2892F87AFC000D6A290 /* FirebaseAuth */; };
+		78B5B2BF2F8966BB00D6A290 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 78B5B2BE2F8966BB00D6A290 /* FirebaseStorage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				788C603A2F7C8299005F4721 /* FirebaseAnalytics in Frameworks */,
+				78B5B2BF2F8966BB00D6A290 /* FirebaseStorage in Frameworks */,
 				78B5B28A2F87AFC000D6A290 /* FirebaseAuth in Frameworks */,
 				788C603C2F7C8299005F4721 /* FirebaseFirestore in Frameworks */,
 			);
@@ -85,6 +87,7 @@
 				788C60392F7C8299005F4721 /* FirebaseAnalytics */,
 				788C603B2F7C8299005F4721 /* FirebaseFirestore */,
 				78B5B2892F87AFC000D6A290 /* FirebaseAuth */,
+				78B5B2BE2F8966BB00D6A290 /* FirebaseStorage */,
 			);
 			productName = Socialcademy;
 			productReference = 788C60192F7C813F005F4721 /* Socialcademy.app */;
@@ -279,6 +282,7 @@
 				DEVELOPMENT_TEAM = LDA6R9QE48;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This lets you to add photos to your profile and posts.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -312,6 +316,7 @@
 				DEVELOPMENT_TEAM = LDA6R9QE48;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This lets you to add photos to your profile and posts.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -384,6 +389,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 788C60382F7C8299005F4721 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
+		};
+		78B5B2BE2F8966BB00D6A290 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 788C60382F7C8299005F4721 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

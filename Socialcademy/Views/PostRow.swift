@@ -15,6 +15,9 @@ struct PostRow: View {
                     .font(.caption)
             }
             .foregroundColor(.gray)
+            if let imageURL = viewModel.imageURL {
+                PostImage(url: imageURL)
+            }
             Text(viewModel.title)
                 .font(.title3)
                 .fontWeight(.semibold)
@@ -86,6 +89,24 @@ private extension PostRow {
         }
     }
 }
+
+private extension PostRow {
+    struct PostImage: View {
+        let url: URL
+        
+        var body: some View {
+            AsyncImage(url: url) { image in
+                image
+                    .resizable()
+                    .scaledToFit()
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+            } placeholder: {
+                Color.clear
+            }
+        }
+    }
+}
+
 
 #Preview {
     PostRow(viewModel: PostRowViewModel(post: Post.testPost, deleteAction: {}, favoriteAction: {}))
