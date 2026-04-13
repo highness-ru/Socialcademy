@@ -2,9 +2,10 @@ import SwiftUI
 
 struct PostRow: View {
     @ObservedObject var viewModel: PostRowViewModel
-    @EnvironmentObject private var factory: ViewModelFactory
     
     @State private var showConfirmationDialog = false
+    
+    @EnvironmentObject private var factory: ViewModelFactory
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -26,6 +27,12 @@ struct PostRow: View {
                 FavoriteButton(isFavorite: viewModel.isFavorite, action: {
                     viewModel.favoritePost()
                 })
+                NavigationLink {
+                    CommentsList(viewModel: factory.makeCommentsViewModel(for: viewModel.post))
+                } label: {
+                    Label("Comments", systemImage: "text.bubble")
+                        .foregroundColor(.secondary)
+                }
                 Spacer()
                 if viewModel.canDeletePost {
                     Button(role: .destructive, action: {
@@ -33,12 +40,6 @@ struct PostRow: View {
                     }) {
                         Label("Delete", systemImage: "trash")
                     }
-                }
-                NavigationLink {
-                    CommentsList(viewModel: factory.makeCommentsViewModel(for: viewModel.post))
-                } label: {
-                    Label("Comments", systemImage: "text.bubble")
-                        .foregroundColor(.secondary)
                 }
             }
             .labelStyle(.iconOnly)
@@ -63,9 +64,30 @@ private extension PostRow {
             NavigationLink {
                 PostsList(viewModel: factory.makePostsViewModel(filter: .author(author)))
             } label: {
-                Text(author.name)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
+                HStack {
+                    ProfileImage(url: author.imageURL)
+                        .frame(width: 32, height: 32)
+                    Text(author.name)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                }
+            }
+        }
+    }
+}
+
+private extension PostRow {
+    struct PostImage: View {
+        let url: URL
+        
+        var body: some View {
+            AsyncImage(url: url) { image in
+                image
+                    .resizable()
+                    .scaledToFit()
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+            } placeholder: {
+                Color.clear
             }
         }
     }
@@ -86,23 +108,6 @@ private extension PostRow {
             }
             .foregroundColor(isFavorite ? .red : .gray)
             .animation(.default, value: isFavorite)
-        }
-    }
-}
-
-private extension PostRow {
-    struct PostImage: View {
-        let url: URL
-        
-        var body: some View {
-            AsyncImage(url: url) { image in
-                image
-                    .resizable()
-                    .scaledToFit()
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-            } placeholder: {
-                Color.clear
-            }
         }
     }
 }

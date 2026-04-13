@@ -41,7 +41,7 @@ class PostsViewModel: ObservableObject {
     
     func makeNewPostViewModel() -> FormViewModel<Post> {
         return FormViewModel(
-            initialValue: Post(title: "", content: "", author: postsRepository.user),
+            initialValue: Post(title: "", content: "", author: postsRepository.user, id: UUID()),
             action: { [weak self] post in
                 try await self?.postsRepository.create(post)
                 self?.posts.value?.insert(post, at: 0)
